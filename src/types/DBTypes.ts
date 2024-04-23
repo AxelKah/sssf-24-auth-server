@@ -28,6 +28,14 @@ type User = Partial<Document> & {
   role: 'user' | 'admin';
 };
 
+type Player = Partial<Document> & {
+  player_name: string;
+  email: string;
+  role: 'player' | 'admin';
+  password: string;
+  score: number;
+};
+
 type UserWithoutPassword = Omit<User, 'password'>;
 
 type UserWithoutPasswordRole = Omit<UserWithoutPassword, 'role'>;
@@ -37,6 +45,7 @@ export {
   Species,
   Animal,
   User,
+  Player,
   UserWithoutPassword,
   UserWithoutPasswordRole,
 };

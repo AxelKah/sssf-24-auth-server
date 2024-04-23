@@ -17,8 +17,6 @@ router
   .put(authenticate, userPut)
   .delete(authenticate, userDelete);
 
-
-
 router.route('/:id').get(userGet);
 
 export default router;
