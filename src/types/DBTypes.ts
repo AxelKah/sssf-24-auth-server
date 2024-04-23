@@ -36,6 +36,14 @@ type Player = Partial<Document> & {
   score: number;
 };
 
+type Game = Partial<Document> & {
+  player1: mongoose.Types.ObjectId;
+  player2: mongoose.Types.ObjectId;
+  score1: number;
+  score2: number;
+  winner: mongoose.Types.ObjectId;
+};
+
 type UserWithoutPassword = Omit<User, 'password'>;
 
 type UserWithoutPasswordRole = Omit<UserWithoutPassword, 'role'>;
@@ -46,6 +54,7 @@ export {
   Animal,
   User,
   Player,
+  Game,
   UserWithoutPassword,
   UserWithoutPasswordRole,
 };
