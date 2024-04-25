@@ -1,54 +1,48 @@
 import {Request, Response, NextFunction} from 'express';
-import {Player} from '../../types/DBTypes';
+import {Game} from '../../types/DBTypes';
 import {MessageResponse} from '../../types/MessageTypes';
-import playerModel from '../models/playerModel';
+import gameModel from '../models/gameModel';
 import CustomError from '../../classes/CustomError';
 import bcrypt from 'bcrypt';
 
-
 const gameListGet = async (
   req: Request,
-  res: Response<Player[]>,
+  res: Response<Game[]>,
   next: NextFunction
 ) => {
   try {
-    const players = await playerModel.find().select('-password -__v -role');
-    res.json(players);
+    const games = await gameModel.find();
+    res.json(games);
   } catch (error) {
     next(error);
   }
 };
-
 const gameGet = async (
   req: Request<{id: string}, {}, {}>,
-  res: Response<Player>,
+  res: Response<Game>,
   next: NextFunction
 ) => {
   try {
-    const player = await playerModel
-      .findById(req.params.id)
-      .select('-password -__v -role');
-    if (!player) {
-      throw new CustomError('No species found', 404);
+    const game = await gameModel.findById(req.params.id);
+    if (!game) {
+      throw new CustomError('No game found', 404);
     }
-    res.json(player);
+    res.json(game);
   } catch (error) {
     next(error);
   }
 };
 
 const gamePost = async (
-  req: Request<{}, {}, Omit<Player, 'player_id'>>,
-  res: Response<MessageResponse & {data: Player}>,
+  req: Request<{}, {}, Omit<Game, 'game_id'>>,
+  res: Response<MessageResponse & {data: Game}>,
   next: NextFunction
 ) => {
   try {
-    req.body.role = 'player';
-    req.body.password = bcrypt.hashSync(req.body.password, 10);
-    const player = await playerModel.create(req.body);
+    const game = await gameModel.create(req.body);
     const response = {
       message: 'Game added',
-      data: player,
+      data: game,
     };
     res.json(response);
   } catch (error) {
@@ -57,22 +51,20 @@ const gamePost = async (
 };
 
 const gamePut = async (
-  req: Request<{id: string}, {}, Omit<Player, 'player_id'>>,
-  res: Response<MessageResponse & {data: Player}>,
+  req: Request<{id: string}, {}, Omit<Game, 'game_id'>>,
+  res: Response<MessageResponse & {data: Game}>,
   next: NextFunction
 ) => {
   try {
-    const player = await playerModel
-      .findByIdAndUpdate(req.params.id, req.body, {
-        new: true,
-      })
-      .select('-password -__v -role');
-    if (!player) {
-      throw new CustomError('No player found', 404);
+    const game = await gameModel.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
+    if (!game) {
+      throw new CustomError('No game found', 404);
     }
     const response = {
-      message: 'Player updated',
-      data: player,
+      message: 'Game updated',
+      data: game,
     };
     res.json(response);
   } catch (error) {
@@ -86,13 +78,11 @@ const gameDelete = async (
   next: NextFunction
 ) => {
   try {
-    const player = await playerModel
-      .findByIdAndDelete(req.params.id)
-      .select('-password -__v -role');
-    if (!player) {
-      throw new CustomError('No player found', 404);
+    const game = await gameModel.findByIdAndDelete(req.params.id);
+    if (!game) {
+      throw new CustomError('No game found', 404);
     }
-    res.json({message: 'Player deleted'});
+    res.json({message: 'Game deleted'});
   } catch (error) {
     next(error);
   }

@@ -37,11 +37,9 @@ type Player = Partial<Document> & {
 };
 
 type Game = Partial<Document> & {
-  player1: mongoose.Types.ObjectId;
-  player2: mongoose.Types.ObjectId;
-  score1: number;
-  score2: number;
-  winner: mongoose.Types.ObjectId;
+  user1: string;
+  user2: string;
+  winner: string;
 };
 
 type UserWithoutPassword = Omit<User, 'password'>;

@@ -3,19 +3,23 @@ import mongoose from 'mongoose';
 import {Game} from '../../types/DBTypes';
 
 const gameSchema = new mongoose.Schema<Game>({
-  user1: {
-    type: String,
-    required: [true, 'User1 is required'],
+  player1: {
+    required: true,
   },
-  user2: {
-    type: String,
-    required: [true, 'User2 is required'],
+  player2: {
+    required: true,
+  },
+  score1: {
+    type: Number,
+    required: true,
+  },
+  score2: {
+    type: Number,
+    required: true,
   },
   winner: {
-    type: String,
-    required: [true, 'Winner is required'],
+    required: true,
   },
 });
-
 
 export default mongoose.model<Game>('Game', gameSchema);
